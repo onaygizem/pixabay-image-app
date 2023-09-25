@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { searchImage } from '../api/pixabay.js'; // Import searchImage function from the api file
+import styles from "./imageSearchScreen.module.css";
+import { Link } from 'react-router-dom';
+
 
 function ImageSearchScreen() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -40,31 +43,45 @@ function ImageSearchScreen() {
     };
 
     return (
-        <div>
-            <h1>Image Search</h1>
-            <input
-                type="text"
-                placeholder="Search for images"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                onKeyDown={handleKeyPress} // Call handleKeyPress on key press
-            />
-            <button onClick={handleSearch}>Search</button>
+        <div className={styles.mainContainer}>
+            <div className={styles.searchBarWrapper}>
+                <div className={styles.search}>
+                    <input
+                        className={styles.searchText}
+                        type="text"
+                        name=""
+                        placeholder="Search for images"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        onKeyDown={handleKeyPress} // Call handleKeyPress on key press
+                    />
+                    <a className={styles.searchBtn} href="#" onClick={handleSearch}>
+                        <i className="fas fa-search"></i>
+                    </a>
+                </div>
+            </div>
             {isLoading ? (
                 <p>Loading...</p>
             ) : (
-                <div className="image-list">
-                    {images.map((image) => (
-                        <img
-                            key={image.id}
-                            src={image.previewURL}
-                            alt={image.tags}
-                            onClick={() => {
-                                // Handle image click (navigate to image detail screen, etc.)
-                                console.log(`Image clicked: ${image.tags}`);
-                            }}
-                        />
-                    ))}
+                <div className={styles.imageList}>
+                    {images.map((image) => {
+                        // console.log(image);
+
+                        return (
+                            <Link to={`/${image.id}`}>
+                                <div className={styles.imageWrapper} key={image.id}>
+                                    <img
+                                        src={image.previewURL}
+                                        alt={image.tags}
+                                        onClick={() => {
+                                            // Handle image click (navigate to image detail screen, etc.)
+                                            console.log(`Image clicked: ${image.tags}`);
+                                        }}
+                                    />
+                                </div>
+                            </Link>
+                        )
+                    })}
                 </div>
             )}
         </div>
