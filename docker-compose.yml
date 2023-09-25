@@ -1,0 +1,14 @@
+version: '3'
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${REACT_APP_PORT}:${REACT_APP_PORT}" # Map the PORT variable from .env to port in the container
+    volumes:
+      - ./src:/app/src # Mount source code for hot-reloading during development
+    env_file:
+      - .env # Specify the .env file for environment variables
+    environment:
+      - REACT_APP_PIXABAY_API_KEY=${REACT_APP_PIXABAY_API_KEY} # Set Pixabay API key as an environment variable
