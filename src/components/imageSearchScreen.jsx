@@ -6,8 +6,23 @@ import { Link } from 'react-router-dom';
 
 function ImageSearchScreen() {
     const [searchTerm, setSearchTerm] = useState('');
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [searchTermAtEnter, setSearchTermAtEnter] = useState('');
+
+
+    const mainContainerStyle = searchTermAtEnter === '' ?
+        {
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh"
+        } :
+        {
+            position: "relative",
+            overflow: "hidden"
+        };
+
 
 
     useEffect(() => {
@@ -18,6 +33,7 @@ function ImageSearchScreen() {
             const parsedData = JSON.parse(storedImageData);
             setImages(parsedData);
             setSearchTerm(storedSearchTerm);
+            setSearchTermAtEnter(storedSearchTerm)
         }
     }, []);
 
@@ -39,8 +55,11 @@ function ImageSearchScreen() {
     const handleSearch = async () => {
         if (searchTerm.trim() === '') {
             // If the search term is empty, clear the images
-            setImages([]);
+            setImages(null);
+            setSearchTermAtEnter('');
             return;
+        } else {
+            setSearchTermAtEnter(searchTerm);
         }
 
         setIsLoading(true);
@@ -51,13 +70,19 @@ function ImageSearchScreen() {
             const data = await searchImage(searchTerm);
 
             if (data) {
-                setImages(data.hits);
+                if (data.hits.length !== 0) {
+                    // Handle when there are results
+                    setImages(data.hits);
 
-                // Store the search term in sessionStorage
-                sessionStorage.setItem('searchTerm', searchTerm);
+                    // Store the search term in sessionStorage
+                    sessionStorage.setItem('searchTerm', searchTerm);
 
-                // Store the image data in sessionStorage
-                sessionStorage.setItem('imageData', JSON.stringify(data.hits));
+                    // Store the image data in sessionStorage
+                    sessionStorage.setItem('imageData', JSON.stringify(data.hits));
+                } else {
+                    // Handle when no results are returned
+                    setImages([]);
+                }
             }
         } catch (error) {
             console.error('Error fetching images:', error);
@@ -78,7 +103,7 @@ function ImageSearchScreen() {
     };
 
     return (
-        <div className={styles.mainContainer}>
+        <div style={mainContainerStyle}>
             <div className={styles.searchBarWrapper}>
                 <div className={styles.search}>
                     <input
@@ -99,24 +124,19 @@ function ImageSearchScreen() {
                 <p>Loading...</p>
             ) : (
                 <div className={styles.imageList}>
-                    {images.map((image) => {
-                        // console.log(image);
-
-                        return (
-                            <Link to={`/${image.id}`}>
-                                <div className={styles.imageWrapper} key={image.id}>
-                                    <img
-                                        src={image.previewURL}
-                                        alt={image.tags}
-                                        onClick={() => {
-                                            // Handle image click (navigate to image detail screen, etc.)
-                                            console.log(`Image clicked: ${image.tags}`);
-                                        }}
-                                    />
-                                </div>
-                            </Link>
-                        )
-                    })}
+                    {images && images.length === 0 ? (
+                        <p>No hits found.</p>
+                    ) : (
+                        images && images.map((image) => {
+                            return (
+                                <Link to={`/${image.id}`} key={image.id}>
+                                    <div className={styles.imageWrapper}>
+                                        <img src={image.previewURL} alt={image.tags} />
+                                    </div>
+                                </Link>
+                            );
+                        })
+                    )}
                 </div>
             )}
         </div>
