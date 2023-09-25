@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getImageById } from '../api/pixabay';
 import styles from "./imageDetailScreen.module.css";
+import { Link } from 'react-router-dom';
 
 // Default user image URL
 const defaultUserImageURL = '/assets/deafultUserImage.jpg';
@@ -42,9 +43,16 @@ function ImageDetailScreen() {
 
     return (
         <div className={styles.imageDetailsContainer}>
-            <div className={styles.userDetails}>
-                <img src={userImageURL} alt={imageDetails.tags} />
-                <h1>{imageDetails.user}</h1>
+            <div className={styles.imageDetailsContainerHeading}>
+                <div className={styles.userDetails}>
+                    <img src={userImageURL} alt={imageDetails.tags} />
+                    <h1>{imageDetails.user}</h1>
+                </div>
+                <Link to={`/`}>
+                    <div className={styles.closeButtonContainer}>
+                        <button>x</button>
+                    </div>
+                </Link>
             </div>
             <div className={styles.imageContainer}>
                 <div className={styles.imagePreview}>

@@ -25,6 +25,11 @@
     height: auto;
 }
 
+.imageDetailsContainerHeading {
+    display: flex;
+    justify-content: space-between;
+}
+
 .userDetails {
     margin: 20px;
     display: flex;
@@ -51,3 +56,12 @@
 .imageTags p {
     font-size: 14px;
 }
+
+/* Close button start */
+.closeButtonContainer button {
+    font-size: large;
+    background-color: blanchedalmond;
+    cursor: pointer;
+}
+
+/* Close button end */
