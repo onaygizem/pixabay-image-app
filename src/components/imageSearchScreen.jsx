@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { searchImage } from '../api/pixabay.js'; // Import searchImage function from the api file
 import styles from "./imageSearchScreen.module.css";
 import { Link } from 'react-router-dom';
@@ -9,6 +9,33 @@ function ImageSearchScreen() {
     const [images, setImages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
+
+    useEffect(() => {
+        const storedSearchTerm = sessionStorage.getItem('searchTerm');
+        const storedImageData = sessionStorage.getItem('imageData');
+
+        if (storedSearchTerm && storedImageData) {
+            const parsedData = JSON.parse(storedImageData);
+            setImages(parsedData);
+            setSearchTerm(storedSearchTerm);
+        }
+    }, []);
+
+    useEffect(() => {
+        // Add an event listener for beforeunload
+        window.addEventListener('beforeunload', clearStoredData);
+
+        // Clear stored data when the component unmounts (e.g., when navigating away)
+        return () => {
+            window.removeEventListener('beforeunload', clearStoredData);
+        };
+    }, []);
+
+    const clearStoredData = () => {
+        sessionStorage.removeItem('searchTerm');
+        sessionStorage.removeItem('imageData');
+    };
+
     const handleSearch = async () => {
         if (searchTerm.trim() === '') {
             // If the search term is empty, clear the images
@@ -18,11 +45,19 @@ function ImageSearchScreen() {
 
         setIsLoading(true);
 
+        clearStoredData();
+
         try {
             const data = await searchImage(searchTerm);
 
             if (data) {
                 setImages(data.hits);
+
+                // Store the search term in sessionStorage
+                sessionStorage.setItem('searchTerm', searchTerm);
+
+                // Store the image data in sessionStorage
+                sessionStorage.setItem('imageData', JSON.stringify(data.hits));
             }
         } catch (error) {
             console.error('Error fetching images:', error);

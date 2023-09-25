@@ -22,6 +22,25 @@ export async function searchImage(searchWord) {
     }
 }
 
+
+export async function getImageById(imageId) {
+    const url = `${constants.DOMAIN}${constants.API}/?key=${constants.PIXABAY_API_KEY}&id=${imageId}`;
+
+    try {
+        const response = await axios.get(url);
+
+        if (response.status === 200) {
+            console.log(response);
+            return response.data.hits[0]; // Assuming you want the first image in the hits array
+        } else {
+            throw new Error(`Request failed with status ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Error fetching image by ID:', error);
+        throw error;
+    }
+}
+
 class RequestError extends Error {
     constructor(message) {
         super(message);

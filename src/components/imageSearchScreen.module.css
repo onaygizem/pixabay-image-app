@@ -8,15 +8,12 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding-top: 20px;
-
-    height: 100px;
+    padding: 20px;
     position: sticky;
     top: 0;
     z-index: 1;
 }
 
-/*  */
 .search {
     background: black;
     height: 40px;
@@ -25,7 +22,7 @@
 }
 
 .search:hover>.searchText {
-    width: 400px;
+    width: 250px;
     padding: 0 10px;
     color: white;
     font-family: monospace, cursive;
@@ -57,7 +54,7 @@
     font-size: 16px;
     transition: ease-in 0.4s;
     line-height: 40px;
-    width: 250px;
+    width: 220px;
     font-family: monospace, cursive;
     padding-left: 10px;
 }
@@ -67,7 +64,6 @@
     font-size: 40px;
 }
 
-/*  */
 
 .imageList {
     display: flex;
@@ -77,8 +73,6 @@
 
     max-height: calc(100vh - 100px);
     overflow-y: auto;
-    padding-top: 20px;
-    padding-bottom: 20px;
 }
 
 .imageWrapper {

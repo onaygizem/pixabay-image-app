@@ -1,0 +1,53 @@
+.imageDetailsContainer {
+    text-align: center;
+    padding: 20px;
+}
+
+.imageDetailsContainer h1 {
+    margin-bottom: -20px;
+}
+
+.imageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.imagePreview {
+    max-width: 100%;
+    min-width: 350px;
+
+}
+
+.imagePreview img {
+    border: 2px solid #ccc;
+    width: 100%;
+    height: auto;
+}
+
+.userDetails {
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.userDetails img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 50%;
+    display: block;
+}
+
+.imageTags {
+    /* margin-top: 20px; */
+}
+
+.imageTags h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.imageTags p {
+    font-size: 14px;
+}
