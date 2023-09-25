@@ -2,7 +2,7 @@ import axios from "axios";
 import * as constants from "./constants.js";
 
 export async function searchImage(searchWord) {
-    const url = `${constants.DOMAIN}${constants.API}/?key=${constants.PIXABAY_API_KEY}&q=${searchWord}&image_type=photo`;
+    const url = `${constants.DOMAIN}${constants.API}/?key=${constants.PIXABAY_API_KEY}&q=${searchWord}&image_type=photo&per_page=50`;
 
     try {
         const response = await axios.get(url);

@@ -12,15 +12,16 @@ function ImageDetailScreen() {
     const { imageId } = useParams();
     const [imageDetails, setImageDetails] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Fetch image details using the imageId from the URL
         async function fetchImageDetails() {
             try {
                 const data = await getImageById(imageId);
                 setImageDetails(data);
             } catch (error) {
                 console.error('Error fetching image details:', error);
+                setError('Error fetching image details. Please try again later.');
             } finally {
                 setIsLoading(false);
             }
@@ -30,13 +31,15 @@ function ImageDetailScreen() {
     }, [imageId]);
 
     if (isLoading) {
-        // Render loading state while fetching data
         return <p>Loading image details...</p>;
     }
 
+    if (error) {
+        return <p>{error}</p>;
+    }
+
     if (!imageDetails) {
-        // Render an error message if image details cannot be fetched
-        return <p>Error fetching image details.</p>;
+        return <p>No image details available.</p>;
     }
 
     const userImageURL = imageDetails.userImageURL || defaultUserImageURL;
@@ -45,12 +48,12 @@ function ImageDetailScreen() {
         <div className={styles.imageDetailsContainer}>
             <div className={styles.imageDetailsContainerHeading}>
                 <div className={styles.userDetails}>
-                    <img src={userImageURL} alt={imageDetails.tags} />
+                    <img src={userImageURL} alt={`${imageDetails.user}'s profile`} />
                     <h1>{imageDetails.user}</h1>
                 </div>
                 <Link to={`/`}>
                     <div className={styles.closeButtonContainer}>
-                        <button>x</button>
+                        <button aria-label="Close">x</button>
                     </div>
                 </Link>
             </div>
@@ -68,3 +71,4 @@ function ImageDetailScreen() {
 }
 
 export default ImageDetailScreen;
+
